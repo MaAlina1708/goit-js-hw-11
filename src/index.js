@@ -27,6 +27,7 @@ const onSearchFormSubmit = async event => {
       Notiflix.Notify.info(
         `We're sorry, but you've reached the end of search results.`
       );
+      event.target.reset();
       loadBtnHide();
       refs.galleryContainer.innerHTML = renderGallery(data.hits);
       return;
