@@ -8,12 +8,11 @@ const pixabeyApi = new PixabeyApi();
 const onSearchFormSubmit = async event => {
   event.preventDefault();
 
-  pixabeyApi.query = event.target.elements.searchQuery.value;
+  pixabeyApi.query = event.target.elements.searchQuery.value.trim();
   pixabeyApi.page = 1;
 
   try {
     const data = await pixabeyApi.fetchGallery();
-    console.log(data.hits);
 
     if (!data.hits.length) {
       Notiflix.Notify.warning(
@@ -21,20 +20,20 @@ const onSearchFormSubmit = async event => {
       );
       event.target.reset();
       refs.galleryContainer.innerHTML = '';
-
-      refs.loadMoreBtn.classList.add('is-hidden');
+      loadBtnHide();
       return;
     }
-    if (pixabeyApi.page * 40 > data.totalHits) {
+    if (pixabeyApi.page * 40 >= data.totalHits) {
       Notiflix.Notify.info(
         `We're sorry, but you've reached the end of search results.`
       );
-      refs.loadMoreBtn.classList.add('is-hidden');
+      loadBtnHide();
       refs.galleryContainer.innerHTML = renderGallery(data.hits);
       return;
     }
     refs.galleryContainer.innerHTML = renderGallery(data.hits);
-    refs.loadMoreBtn.classList.remove('is-hidden');
+    loadBtnShow();
+    event.target.reset();
   } catch (err) {
     console.log(err);
   }
@@ -43,7 +42,6 @@ const onLoadMoreBtnClick = async event => {
   pixabeyApi.page += 1;
   pixabeyApi.fetchGallery();
 
-  // event.target.classList.add('disabled');
   try {
     const data = await pixabeyApi.fetchGallery();
 
@@ -51,10 +49,26 @@ const onLoadMoreBtnClick = async event => {
       'beforeend',
       renderGallery(data.hits)
     );
+    if (pixabeyApi.page * 40 >= data.totalHits) {
+      console.log('hello');
+      Notiflix.Notify.info(
+        `We're sorry, but you've reached the end of search results.`
+      );
+      loadBtnHide();
+      refs.galleryContainer.innerHTML = renderGallery(data.hits);
+      return;
+    }
   } catch (err) {
     console.log(err);
   }
 };
+
+function loadBtnHide() {
+  refs.loadMoreBtn.classList.add('is-hidden');
+}
+function loadBtnShow() {
+  refs.loadMoreBtn.classList.remove('is-hidden');
+}
 
 refs.searchForm.addEventListener('submit', onSearchFormSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
