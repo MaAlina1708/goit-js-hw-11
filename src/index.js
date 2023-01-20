@@ -13,21 +13,23 @@ const onSearchFormSubmit = async event => {
 
   try {
     const data = await pixabeyApi.fetchGallery();
+    console.log(data.hits);
 
     if (!data.hits.length) {
-      refs.loadMoreBtn.classList.add('is-hidden');
       Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again'
       );
-      refs.galleryContainer.innerHTML = '';
       event.target.reset();
+      refs.galleryContainer.innerHTML = '';
+
+      refs.loadMoreBtn.classList.add('is-hidden');
       return;
     }
     if (pixabeyApi.page * 40 > data.totalHits) {
-      refs.loadMoreBtn.classList.add('is-hidden');
       Notiflix.Notify.info(
         `We're sorry, but you've reached the end of search results.`
       );
+      refs.loadMoreBtn.classList.add('is-hidden');
       refs.galleryContainer.innerHTML = renderGallery(data.hits);
       return;
     }
@@ -39,8 +41,9 @@ const onSearchFormSubmit = async event => {
 };
 const onLoadMoreBtnClick = async event => {
   pixabeyApi.page += 1;
+  pixabeyApi.fetchGallery();
 
-  event.target.classList.add('disabled');
+  // event.target.classList.add('disabled');
   try {
     const data = await pixabeyApi.fetchGallery();
 
