@@ -41,7 +41,6 @@ const onSearchFormSubmit = async event => {
 };
 const onLoadMoreBtnClick = async event => {
   pixabeyApi.page += 1;
-  pixabeyApi.fetchGallery();
 
   try {
     const data = await pixabeyApi.fetchGallery();
@@ -51,12 +50,11 @@ const onLoadMoreBtnClick = async event => {
       renderGallery(data.hits)
     );
     if (pixabeyApi.page * 40 >= data.totalHits) {
-      console.log('hello');
       Notiflix.Notify.info(
         `We're sorry, but you've reached the end of search results.`
       );
       loadBtnHide();
-      refs.galleryContainer.innerHTML = renderGallery(data.hits);
+      refs.galleryContainer.insertAdjacentHTML = renderGallery(data.hits);
       return;
     }
   } catch (err) {
