@@ -13,7 +13,7 @@ const onSearchFormSubmit = async event => {
 
   try {
     const data = await pixabeyApi.fetchGallery();
-    console.log(data);
+
     if (!data.hits.length) {
       refs.loadMoreBtn.classList.add('is-hidden');
       Notiflix.Notify.warning(
@@ -37,4 +37,21 @@ const onSearchFormSubmit = async event => {
     console.log(err);
   }
 };
+const onLoadMoreBtnClick = async event => {
+  pixabeyApi.page += 1;
+
+  event.target.classList.add('disabled');
+  try {
+    const data = await pixabeyApi.fetchGallery();
+
+    refs.galleryContainer.insertAdjacentHTML(
+      'beforeend',
+      renderGallery(data.hits)
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 refs.searchForm.addEventListener('submit', onSearchFormSubmit);
+refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);

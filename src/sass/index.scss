@@ -20,9 +20,12 @@ p {
 .search-form {
   display: flex;
 }
-
+.header-container {
+  display: block;
+  background-color: #013ca2c2;
+  border-radius: 4px;
+}
 .input-wrapper {
-  position: relative;
   display: flex;
   margin: 0 auto;
 }
@@ -36,14 +39,18 @@ p {
 
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   text-align: center;
 }
 
 .photo-card {
   width: calc((100% - 60px) / 4);
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06),
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.12), 0px 3px 3px rgba(0, 0, 0, 0.06),
     0px 0px 2px rgba(0, 0, 0, 0.16);
+  &:hover {
+    box-shadow: 0px 2px 2px 2px rgba(1, 60, 162, 0.5);
+  }
 }
 
 .info {
@@ -59,4 +66,17 @@ img {
   width: 100%;
   height: 250 px;
   object-fit: cover;
+}
+
+.load-more {
+  display: block;
+  margin: 0 auto;
+  width: 100px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(1, 60, 162, 0.761);
+
+  color: #ffffff;
+  cursor: pointer;
 }
